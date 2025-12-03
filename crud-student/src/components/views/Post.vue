@@ -1,12 +1,37 @@
 <script setup>
-    import { ref } from 'vue';
+    import { ref, watch } from 'vue';
 
     const mssv = ref('');
     const name = ref('');
     const age = ref('')
 
-    const emit = defineEmits(['add-student']);
+    const props = defineProps({
+        editingStudent : {
+            type : Object,
+            default: null,
+        },
+    }); 
 
+    const isEditing = ref(false);
+
+    watch(
+        () => props.editingStudent,
+        (newValue) => {
+            if(newValue){
+                mssv.value = newValue.mssv;
+                name.value = newValue.name;
+                age.value = newValue.age;
+                isEditing.value = true;
+            }else{
+                mssv.value = "";
+                name.value = "";
+                age.value = "";
+                isEditing.value = false;
+            }
+        }
+    );
+
+    const emit = defineEmits(['add-student','update-student']);
 
     const handleSubmit = () => {
         const student = {
@@ -15,15 +40,19 @@
             age : age.value
         }
 
-        // 
         emit('add-student',student);
 
-        //clear form
+        resetForm();
+
+        isEditing.value = false;
+    }
+
+    const resetForm = () => {
         mssv.value = "";
         name.value = "";
         age.value = "";
     }
-    
+        
 </script>
 
 <template>

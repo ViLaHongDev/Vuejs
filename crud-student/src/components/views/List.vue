@@ -1,16 +1,20 @@
 <script setup>
-    defineProps({
-        list: {
-            type: Array,
-            required: true,
-        },
-    });
 
-    const emit = defineEmits(['delete-student']);
+  const props = defineProps({
+      list : {
+        type : Array,
+      }
+  });
+
+    const emit = defineEmits(['delete-student','edit-student']);
 
     const handleDelete = (index) => {
         emit('delete-student',index);
     };
+
+    const handleEdit = (student,index) => {
+        emit('edit-student',student,index);
+    }
 
 </script>
 
@@ -36,8 +40,8 @@
           <td>{{ item.age }}</td>
           <td>         
              <button type="button" @click="handleDelete(index)">Delete</button>
-             <button type="button">Edit</button>
-          </td>
+             <button type="button" @click="handleEdit(item,index)">Edit</button>
+          </td>        
         </tr>
       </tbody>
     </table>
